@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fffaf0;
+  --foreground: #33291f;
+  --muted: #7a6a58;
+  --surface: #fffef9;
+  --surface-strong: #ffffff;
+  --line: #eadfce;
+  --accent: #6f9b79;
+  --accent-soft: #eaf3e7;
+  --warm: #f6d7a8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  background: var(--background);
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(246, 215, 168, 0.42), transparent 30rem),
+    linear-gradient(180deg, #fffaf0 0%, #fffef9 55%, #f8f2e8 100%);
+  color: var(--foreground);
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN",
+    "Yu Gothic",
+    "Segoe UI",
+    sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}

@@ -1,0 +1,32 @@
+# money-tools
+
+Instagram「お金の相談室」から利用する無料Webツール集です。
+
+## ローカルでの起動
+
+```bash
+pnpm install
+pnpm dev
+```
+
+起動後、ブラウザで `http://localhost:3000` を開きます。
+
+本番ビルドに近い状態で確認する場合は、以下を使います。
+
+```bash
+pnpm build
+pnpm start
+```
+
+## 確認ポイント
+
+- スマホ幅でカードが1列に並ぶこと
+- `coming-soon` は「近日公開」、`preparing` は「準備中」と表示されること
+- 未公開のツールカードはクリックできないこと
+- フッターに免責文が表示されること
+
+## ツール追加の流れ
+
+1. `features/tools/data/tools.ts` にツール情報を追加します。
+2. 公開する場合は `status` を `available` にします。
+3. 必要に応じて `app/tools/[slug]` 配下へツールページを追加します。
