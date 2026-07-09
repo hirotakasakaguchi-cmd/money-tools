@@ -13,7 +13,7 @@ export const tools: Tool[] = [
     slug: "education-cost",
     title: "教育費シミュレーター",
     description: "教育費が足りるか3分でチェック",
-    status: "coming-soon",
+    status: "available",
     category: "education",
     categoryLabel: "教育費",
   },
