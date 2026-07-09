@@ -2,6 +2,14 @@ import type { Tool } from "@/features/tools/types/tool";
 
 export const tools: Tool[] = [
   {
+    slug: "social-insurance",
+    title: "社会保険シミュレーター",
+    description: "扶養内と社保加入を比較",
+    status: "available",
+    category: "social-insurance",
+    categoryLabel: "社会保険",
+  },
+  {
     slug: "education-cost",
     title: "教育費シミュレーター",
     description: "教育費が足りるか3分でチェック",
@@ -16,14 +24,6 @@ export const tools: Tool[] = [
     status: "coming-soon",
     category: "household",
     categoryLabel: "家計",
-  },
-  {
-    slug: "social-insurance",
-    title: "社会保険シミュレーター",
-    description: "扶養内と社保加入を比較",
-    status: "coming-soon",
-    category: "social-insurance",
-    categoryLabel: "社会保険",
   },
   {
     slug: "ai-money-consult",
