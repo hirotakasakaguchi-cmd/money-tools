@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Container } from "@/components/ui/Container";
 import { NumberInput } from "@/components/ui/NumberInput";
+import { ToolFooter } from "@/components/ui/ToolFooter";
 import { EDUCATION_COSTS, SAVING_METHODS } from "@/features/education-cost/constants";
 import { calculateEducationCost } from "@/features/education-cost/calculateEducationCost";
 import type {
@@ -330,6 +331,7 @@ export default function EducationCostPage() {
           </section>
         </div>
 
+        <ToolFooter />
         <SiteFooter />
       </Container>
     </main>

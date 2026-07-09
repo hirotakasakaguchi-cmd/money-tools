@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Container } from "@/components/ui/Container";
 import { NumberInput } from "@/components/ui/NumberInput";
+import { ToolFooter } from "@/components/ui/ToolFooter";
 import { calculateSocialInsurance } from "@/features/social-insurance/calculateSocialInsurance";
 import type {
   AgeGroup,
@@ -357,6 +358,7 @@ export default function SocialInsurancePage() {
           </section>
         </div>
 
+        <ToolFooter />
         <SiteFooter />
       </Container>
     </main>

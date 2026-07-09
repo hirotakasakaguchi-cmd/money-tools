@@ -18,10 +18,10 @@ export const tools: Tool[] = [
     categoryLabel: "教育費",
   },
   {
-    slug: "household-check",
-    title: "家計診断",
+    slug: "household-budget",
+    title: "家計診断シミュレーター",
     description: "家計のバランスをチェック",
-    status: "coming-soon",
+    status: "available",
     category: "household",
     categoryLabel: "家計",
   },
