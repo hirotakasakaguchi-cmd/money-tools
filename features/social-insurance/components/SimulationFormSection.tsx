@@ -1,3 +1,4 @@
+import { ConsultationGoalSection } from "@/features/social-insurance/components/ConsultationGoalSection";
 import { CurrentConditionSection } from "@/features/social-insurance/components/CurrentConditionSection";
 import { ProposedConditionSection } from "@/features/social-insurance/components/ProposedConditionSection";
 import { SegmentedControl } from "@/features/social-insurance/components/SegmentedControl";
@@ -5,56 +6,55 @@ import type {
   AgeGroup,
   InsuranceStatus,
 } from "@/features/social-insurance/types";
+import type { FormState } from "@/features/social-insurance/v2/formTypes";
+import type {
+  ConsultationGoal,
+  SpouseAllowanceStatus,
+} from "@/features/social-insurance/v2/types";
 
 type SimulationFormSectionProps = {
-  ageGroup: AgeGroup;
-  currentHourlyWage: string;
-  currentWeeklyHours: string;
-  currentInsuranceStatus: InsuranceStatus;
-  hasSpouseAllowance: boolean;
-  spouseAllowanceMonthly: string;
-  futureWeeklyHours: string;
-  futureInsuranceStatus: InsuranceStatus;
-  futureHourlyWage: string;
+  form: FormState;
+  onGoalChange: (value: ConsultationGoal) => void;
   onAgeGroupChange: (value: AgeGroup) => void;
   onCurrentHourlyWageChange: (value: string) => void;
   onCurrentWeeklyHoursChange: (value: string) => void;
   onCurrentInsuranceStatusChange: (value: InsuranceStatus) => void;
-  onSpouseAllowancePresenceChange: (value: "yes" | "no") => void;
-  onSpouseAllowanceMonthlyChange: (value: string) => void;
-  onFutureWeeklyHoursChange: (value: string) => void;
-  onFutureInsuranceStatusChange: (value: InsuranceStatus) => void;
-  onFutureHourlyWageChange: (value: string) => void;
+  onCurrentSpouseAllowanceStatusChange: (value: SpouseAllowanceStatus) => void;
+  onCurrentSpouseAllowanceMonthlyChange: (value: string) => void;
+  onProposedWeeklyHoursChange: (value: string) => void;
+  onProposedInsuranceStatusChange: (value: InsuranceStatus) => void;
+  onProposedHourlyWageChange: (value: string) => void;
+  onProposedSpouseAllowanceStatusChange: (value: SpouseAllowanceStatus) => void;
+  onProposedSpouseAllowanceMonthlyChange: (value: string) => void;
+  onSubmit: () => void;
 };
 
 export function SimulationFormSection({
-  ageGroup,
-  currentHourlyWage,
-  currentWeeklyHours,
-  currentInsuranceStatus,
-  hasSpouseAllowance,
-  spouseAllowanceMonthly,
-  futureWeeklyHours,
-  futureInsuranceStatus,
-  futureHourlyWage,
+  form,
+  onGoalChange,
   onAgeGroupChange,
   onCurrentHourlyWageChange,
   onCurrentWeeklyHoursChange,
   onCurrentInsuranceStatusChange,
-  onSpouseAllowancePresenceChange,
-  onSpouseAllowanceMonthlyChange,
-  onFutureWeeklyHoursChange,
-  onFutureInsuranceStatusChange,
-  onFutureHourlyWageChange,
+  onCurrentSpouseAllowanceStatusChange,
+  onCurrentSpouseAllowanceMonthlyChange,
+  onProposedWeeklyHoursChange,
+  onProposedInsuranceStatusChange,
+  onProposedHourlyWageChange,
+  onProposedSpouseAllowanceStatusChange,
+  onProposedSpouseAllowanceMonthlyChange,
+  onSubmit,
 }: SimulationFormSectionProps) {
   return (
     <section className="rounded-lg border border-[#eadfce] bg-white/86 p-4 shadow-[0_10px_30px_rgba(92,67,39,0.08)] sm:p-5">
       <h2 className="text-xl font-bold text-[#33291f]">入力</h2>
 
       <div className="mt-5 space-y-6">
+        <ConsultationGoalSection value={form.goal} onChange={onGoalChange} />
+
         <SegmentedControl
           label="年齢区分"
-          value={ageGroup}
+          value={form.ageGroup}
           columns={3}
           options={[
             { value: "under40", label: "39歳以下" },
@@ -65,26 +65,38 @@ export function SimulationFormSection({
         />
 
         <CurrentConditionSection
-          hourlyWage={currentHourlyWage}
-          weeklyHours={currentWeeklyHours}
-          insuranceStatus={currentInsuranceStatus}
-          hasSpouseAllowance={hasSpouseAllowance}
-          spouseAllowanceMonthly={spouseAllowanceMonthly}
+          value={form.current}
           onHourlyWageChange={onCurrentHourlyWageChange}
           onWeeklyHoursChange={onCurrentWeeklyHoursChange}
           onInsuranceStatusChange={onCurrentInsuranceStatusChange}
-          onSpouseAllowancePresenceChange={onSpouseAllowancePresenceChange}
-          onSpouseAllowanceMonthlyChange={onSpouseAllowanceMonthlyChange}
+          onSpouseAllowanceStatusChange={
+            onCurrentSpouseAllowanceStatusChange
+          }
+          onSpouseAllowanceMonthlyChange={
+            onCurrentSpouseAllowanceMonthlyChange
+          }
         />
 
         <ProposedConditionSection
-          weeklyHours={futureWeeklyHours}
-          insuranceStatus={futureInsuranceStatus}
-          hourlyWage={futureHourlyWage}
-          onWeeklyHoursChange={onFutureWeeklyHoursChange}
-          onInsuranceStatusChange={onFutureInsuranceStatusChange}
-          onHourlyWageChange={onFutureHourlyWageChange}
+          value={form.proposed}
+          onWeeklyHoursChange={onProposedWeeklyHoursChange}
+          onInsuranceStatusChange={onProposedInsuranceStatusChange}
+          onHourlyWageChange={onProposedHourlyWageChange}
+          onSpouseAllowanceStatusChange={
+            onProposedSpouseAllowanceStatusChange
+          }
+          onSpouseAllowanceMonthlyChange={
+            onProposedSpouseAllowanceMonthlyChange
+          }
         />
+
+        <button
+          type="button"
+          onClick={onSubmit}
+          className="min-h-12 w-full rounded-lg bg-[#5d8666] px-5 py-3 text-base font-bold text-white shadow-sm transition hover:bg-[#4f7658] focus:outline-none focus:ring-4 focus:ring-[#d6e6d4]"
+        >
+          試算する
+        </button>
       </div>
     </section>
   );

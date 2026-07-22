@@ -2,7 +2,7 @@ import { useId } from "react";
 
 type SegmentedControlProps<T extends string> = {
   label: string;
-  value: T;
+  value: T | "";
   columns?: 2 | 3;
   options: { value: T; label: string }[];
   onChange: (value: T) => void;

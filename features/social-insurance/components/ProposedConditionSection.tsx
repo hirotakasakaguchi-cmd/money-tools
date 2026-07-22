@@ -1,23 +1,27 @@
 import { NumberInput } from "@/components/ui/NumberInput";
 import { SegmentedControl } from "@/features/social-insurance/components/SegmentedControl";
+import { SpouseAllowanceFields } from "@/features/social-insurance/components/SpouseAllowanceFields";
 import type { InsuranceStatus } from "@/features/social-insurance/types";
+import type { ScenarioFormState } from "@/features/social-insurance/v2/formTypes";
 
 type ProposedConditionSectionProps = {
-  weeklyHours: string;
-  insuranceStatus: InsuranceStatus;
-  hourlyWage: string;
+  value: ScenarioFormState;
   onWeeklyHoursChange: (value: string) => void;
   onInsuranceStatusChange: (value: InsuranceStatus) => void;
   onHourlyWageChange: (value: string) => void;
+  onSpouseAllowanceStatusChange: (
+    value: Exclude<ScenarioFormState["spouseAllowance"]["status"], "">,
+  ) => void;
+  onSpouseAllowanceMonthlyChange: (value: string) => void;
 };
 
 export function ProposedConditionSection({
-  weeklyHours,
-  insuranceStatus,
-  hourlyWage,
+  value,
   onWeeklyHoursChange,
   onInsuranceStatusChange,
   onHourlyWageChange,
+  onSpouseAllowanceStatusChange,
+  onSpouseAllowanceMonthlyChange,
 }: ProposedConditionSectionProps) {
   return (
     <fieldset>
@@ -27,13 +31,13 @@ export function ProposedConditionSection({
       <div className="mt-4 grid gap-4">
         <NumberInput
           label="週の労働時間"
-          value={weeklyHours}
+          value={value.workplace.weeklyHours}
           unit="時間"
           onChange={onWeeklyHoursChange}
         />
         <SegmentedControl
           label="社会保険加入予定"
-          value={insuranceStatus}
+          value={value.workplace.insuranceStatus}
           options={[
             { value: "dependent", label: "扶養内" },
             { value: "insured", label: "社保加入" },
@@ -42,10 +46,17 @@ export function ProposedConditionSection({
         />
         <NumberInput
           label="変更後の時給"
-          value={hourlyWage}
+          value={value.workplace.hourlyWage}
           unit="円"
           placeholder="未入力なら現在と同じ"
           onChange={onHourlyWageChange}
+        />
+        <SpouseAllowanceFields
+          scenario="proposed"
+          status={value.spouseAllowance.status}
+          monthlyAmount={value.spouseAllowance.monthlyAmount}
+          onStatusChange={onSpouseAllowanceStatusChange}
+          onMonthlyAmountChange={onSpouseAllowanceMonthlyChange}
         />
       </div>
     </fieldset>
