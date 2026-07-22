@@ -58,13 +58,14 @@ export function ConsultationGoalSection({
             >
               <input
                 type="radio"
+                data-field-path="goal"
                 name="consultationGoal"
                 value={option.value}
                 checked={isSelected}
                 onChange={() => onChange(option.value)}
-                className="sr-only"
+                className="peer sr-only scroll-mt-24"
               />
-              <span className="block text-sm font-bold text-[#33291f]">
+              <span className="block rounded-sm text-sm font-bold text-[#33291f] peer-focus:ring-4 peer-focus:ring-[#d6e6d4]">
                 {option.label}
               </span>
               <span className="mt-1 block text-xs leading-5 text-[#6f5f4f]">

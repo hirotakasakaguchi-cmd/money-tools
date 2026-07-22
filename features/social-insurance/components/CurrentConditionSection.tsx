@@ -38,6 +38,8 @@ export function CurrentConditionSection({
         <div>
           <NumberInput
             label="時給"
+            data-field-path="current.workplace.hourlyWage"
+            className="scroll-mt-24"
             value={value.workplace.hourlyWage}
             unit="円"
             onChange={onHourlyWageChange}
@@ -50,6 +52,8 @@ export function CurrentConditionSection({
         <div>
           <NumberInput
             label="週の労働時間"
+            data-field-path="current.workplace.weeklyHours"
+            className="scroll-mt-24"
             value={value.workplace.weeklyHours}
             unit="時間"
             onChange={onWeeklyHoursChange}
@@ -62,6 +66,7 @@ export function CurrentConditionSection({
         <div>
           <SegmentedControl
             label="社会保険加入状況"
+            fieldPath="current.workplace.insuranceStatus"
             value={value.workplace.insuranceStatus}
             options={[
               { value: "dependent", label: "扶養内" },
