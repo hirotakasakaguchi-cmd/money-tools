@@ -1,3 +1,4 @@
+import type { FormFieldPath } from "@/features/social-insurance/v2/formTypes";
 import type { ScenarioKey } from "@/features/social-insurance/v2/types";
 
 export type WarningCode =
@@ -11,6 +12,8 @@ export type WarningSeverity = "warning" | "info";
 export type ValidationWarning = {
   code: WarningCode;
   severity: WarningSeverity;
-  scenarioKey: ScenarioKey;
+  scope: ScenarioKey;
+  fieldPaths: readonly FormFieldPath[];
   message: string;
+  recommendedAction: string;
 };

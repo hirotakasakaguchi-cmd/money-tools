@@ -55,9 +55,44 @@ describe("validateSimulation", () => {
       {
         code: "insuredUnder20Hours",
         severity: "warning",
-        scenarioKey: "current",
+        scope: "current",
+        fieldPaths: [
+          "current.workplace.weeklyHours",
+          "current.workplace.insuranceStatus",
+        ],
         message:
           "週20時間未満で社会保険加入を選択しています。勤務先への確認が必要な可能性があります。",
+        recommendedAction:
+          "勤務先へ社会保険の加入条件を確認してください。",
+      },
+    ]);
+  });
+
+  it("switches field paths between current and proposed scopes", () => {
+    const input = createValidSimulationInput();
+    input.current.workplaces[0].insuranceStatus = "insured";
+    input.current.workplaces[0].weeklyHours = 19;
+    input.proposed.workplaces[0].weeklyHours = 19;
+
+    expect(
+      validateSimulation(input).map(({ scope, fieldPaths }) => ({
+        scope,
+        fieldPaths,
+      })),
+    ).toEqual([
+      {
+        scope: "current",
+        fieldPaths: [
+          "current.workplace.weeklyHours",
+          "current.workplace.insuranceStatus",
+        ],
+      },
+      {
+        scope: "proposed",
+        fieldPaths: [
+          "proposed.workplace.weeklyHours",
+          "proposed.workplace.insuranceStatus",
+        ],
       },
     ]);
   });
@@ -80,7 +115,13 @@ describe("validateSimulation", () => {
       expect.objectContaining({
         code: "dependentLongHours",
         severity: "warning",
-        scenarioKey: "proposed",
+        scope: "proposed",
+        fieldPaths: [
+          "proposed.workplace.weeklyHours",
+          "proposed.workplace.insuranceStatus",
+        ],
+        recommendedAction:
+          "勤務先へ社会保険の加入状況を確認してください。",
       }),
     ]);
   });
@@ -102,7 +143,14 @@ describe("validateSimulation", () => {
       expect.objectContaining({
         code: "dependentAnnualIncomeOver1300000",
         severity: "warning",
-        scenarioKey: "current",
+        scope: "current",
+        fieldPaths: [
+          "current.workplace.hourlyWage",
+          "current.workplace.weeklyHours",
+          "current.workplace.insuranceStatus",
+        ],
+        recommendedAction:
+          "配偶者の健康保険の加入先へ扶養条件を確認してください。",
       }),
     ]);
   });
@@ -131,9 +179,12 @@ describe("validateSimulation", () => {
       {
         code: "spouseAllowanceUnknown",
         severity: "info",
-        scenarioKey: "current",
+        scope: "current",
+        fieldPaths: ["current.spouseAllowance.status"],
         message:
           "配偶者手当の受給状態が不明です。勤務先への確認が必要な可能性があります。",
+        recommendedAction:
+          "配偶者の勤務先へ手当の支給条件を確認してください。",
       },
     ]);
   });
@@ -148,7 +199,10 @@ describe("validateSimulation", () => {
     expect(validateSimulation(input)).toEqual([
       expect.objectContaining({
         code: "spouseAllowanceUnknown",
-        scenarioKey: "proposed",
+        scope: "proposed",
+        fieldPaths: ["proposed.spouseAllowance.status"],
+        recommendedAction:
+          "配偶者の勤務先へ手当の支給条件を確認してください。",
       }),
     ]);
   });
@@ -163,7 +217,7 @@ describe("validateSimulation", () => {
 
     expect(
       validateSimulation(input).map(
-        ({ scenarioKey, code }) => `${scenarioKey}:${code}`,
+        ({ scope, code }) => `${scope}:${code}`,
       ),
     ).toEqual([
       "current:dependentLongHours",
