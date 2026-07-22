@@ -24,6 +24,10 @@ export function SocialInsuranceSimulator() {
     setState((current) => updateSimulationForm(current, update));
   }
 
+  function handleSubmit() {
+    setState(submitSimulation(state));
+  }
+
   const fieldErrors =
     state.execution?.status === "invalid" ? state.execution.fieldErrors : [];
   const invalidExecution: SimulationExecutionFailure | null =
@@ -43,36 +47,56 @@ export function SocialInsuranceSimulator() {
           updateForm((form) => ({ ...form, ageGroup: value }))
         }
         onCurrentHourlyWageChange={(value) =>
-          updateForm((form) => updateWorkplace(form, "current", "hourlyWage", value))
+          updateForm((form) =>
+            updateWorkplace(form, "current", "hourlyWage", value),
+          )
         }
         onCurrentWeeklyHoursChange={(value) =>
-          updateForm((form) => updateWorkplace(form, "current", "weeklyHours", value))
+          updateForm((form) =>
+            updateWorkplace(form, "current", "weeklyHours", value),
+          )
         }
         onCurrentInsuranceStatusChange={(value) =>
-          updateForm((form) => updateWorkplace(form, "current", "insuranceStatus", value))
+          updateForm((form) =>
+            updateWorkplace(form, "current", "insuranceStatus", value),
+          )
         }
         onCurrentSpouseAllowanceStatusChange={(value) =>
-          updateForm((form) => updateSpouseAllowance(form, "current", "status", value))
+          updateForm((form) =>
+            updateSpouseAllowance(form, "current", "status", value),
+          )
         }
         onCurrentSpouseAllowanceMonthlyChange={(value) =>
-          updateForm((form) => updateSpouseAllowance(form, "current", "monthlyAmount", value))
+          updateForm((form) =>
+            updateSpouseAllowance(form, "current", "monthlyAmount", value),
+          )
         }
         onProposedWeeklyHoursChange={(value) =>
-          updateForm((form) => updateWorkplace(form, "proposed", "weeklyHours", value))
+          updateForm((form) =>
+            updateWorkplace(form, "proposed", "weeklyHours", value),
+          )
         }
         onProposedInsuranceStatusChange={(value) =>
-          updateForm((form) => updateWorkplace(form, "proposed", "insuranceStatus", value))
+          updateForm((form) =>
+            updateWorkplace(form, "proposed", "insuranceStatus", value),
+          )
         }
         onProposedHourlyWageChange={(value) =>
-          updateForm((form) => updateWorkplace(form, "proposed", "hourlyWage", value))
+          updateForm((form) =>
+            updateWorkplace(form, "proposed", "hourlyWage", value),
+          )
         }
         onProposedSpouseAllowanceStatusChange={(value) =>
-          updateForm((form) => updateSpouseAllowance(form, "proposed", "status", value))
+          updateForm((form) =>
+            updateSpouseAllowance(form, "proposed", "status", value),
+          )
         }
         onProposedSpouseAllowanceMonthlyChange={(value) =>
-          updateForm((form) => updateSpouseAllowance(form, "proposed", "monthlyAmount", value))
+          updateForm((form) =>
+            updateSpouseAllowance(form, "proposed", "monthlyAmount", value),
+          )
         }
-        onSubmit={() => setState((current) => submitSimulation(current))}
+        onSubmit={handleSubmit}
       />
 
       <div aria-live="polite">
