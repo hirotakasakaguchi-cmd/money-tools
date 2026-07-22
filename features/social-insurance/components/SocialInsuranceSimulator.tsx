@@ -4,12 +4,18 @@ import { useState } from "react";
 import { SimulationAssumptionsSection } from "@/features/social-insurance/components/SimulationAssumptionsSection";
 import { SimulationFormSection } from "@/features/social-insurance/components/SimulationFormSection";
 import { SimulationResultSection } from "@/features/social-insurance/components/SimulationResultSection";
+import { SimulationWarningsSection } from "@/features/social-insurance/components/SimulationWarningsSection";
+import { SummaryConclusionSection } from "@/features/social-insurance/components/SummaryConclusionSection";
 import {
   initialSimulationUiState,
   submitSimulation,
   updateSimulationForm,
 } from "@/features/social-insurance/components/simulationUiState";
 import type { FormState } from "@/features/social-insurance/v2/formTypes";
+import type {
+  SimulationExecutionFailure,
+  SimulationExecutionSuccess,
+} from "@/features/social-insurance/v2/simulationExecutionTypes";
 
 export function SocialInsuranceSimulator() {
   const [state, setState] = useState(initialSimulationUiState);
@@ -20,6 +26,10 @@ export function SocialInsuranceSimulator() {
 
   const fieldErrors =
     state.execution?.status === "invalid" ? state.execution.fieldErrors : [];
+  const invalidExecution: SimulationExecutionFailure | null =
+    state.execution?.status === "invalid" ? state.execution : null;
+  const successExecution: SimulationExecutionSuccess | null =
+    state.execution?.status === "success" ? state.execution : null;
 
   return (
     <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
@@ -66,7 +76,7 @@ export function SocialInsuranceSimulator() {
       />
 
       <div aria-live="polite">
-        {state.execution?.status === "invalid" ? (
+        {invalidExecution ? (
           <section className="rounded-lg border border-[#eadfce] bg-white p-4 shadow-[0_10px_30px_rgba(92,67,39,0.08)] sm:p-5">
             <h2 className="text-lg font-bold text-[#9a4f43]">
               入力内容を確認してください
@@ -77,9 +87,13 @@ export function SocialInsuranceSimulator() {
           </section>
         ) : null}
 
-        {state.execution?.status === "success" ? (
+        {successExecution ? (
           <div className="space-y-5">
-            <SimulationResultSection result={state.execution.result} />
+            <SummaryConclusionSection
+              conclusion={successExecution.conclusion}
+            />
+            <SimulationResultSection result={successExecution.result} />
+            <SimulationWarningsSection warnings={successExecution.warnings} />
             <section className="rounded-lg border border-[#eadfce] bg-white/86 p-4 sm:p-5">
               <h2 className="text-base font-bold text-[#33291f]">
                 計算条件・注意書き
