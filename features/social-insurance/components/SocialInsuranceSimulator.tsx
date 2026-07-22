@@ -1,136 +1,172 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { SimulationAssumptionsSection } from "@/features/social-insurance/components/SimulationAssumptionsSection";
 import { SimulationFormSection } from "@/features/social-insurance/components/SimulationFormSection";
 import { SimulationResultSection } from "@/features/social-insurance/components/SimulationResultSection";
-import { calculateSocialInsurance } from "@/features/social-insurance/calculateSocialInsurance";
+import { SimulationWarningsSection } from "@/features/social-insurance/components/SimulationWarningsSection";
+import { SummaryConclusionSection } from "@/features/social-insurance/components/SummaryConclusionSection";
+import {
+  initialSimulationUiState,
+  submitSimulation,
+  updateSimulationForm,
+} from "@/features/social-insurance/components/simulationUiState";
+import type { FormState } from "@/features/social-insurance/v2/formTypes";
 import type {
-  AgeGroup,
-  InsuranceStatus,
-} from "@/features/social-insurance/types";
-
-type FormState = {
-  ageGroup: AgeGroup;
-  currentHourlyWage: string;
-  currentWeeklyHours: string;
-  currentInsuranceStatus: InsuranceStatus;
-  hasSpouseAllowance: boolean;
-  spouseAllowanceMonthly: string;
-  futureWeeklyHours: string;
-  futureInsuranceStatus: InsuranceStatus;
-  futureHourlyWage: string;
-};
-
-const initialFormState: FormState = {
-  ageGroup: "under40",
-  currentHourlyWage: "1000",
-  currentWeeklyHours: "20",
-  currentInsuranceStatus: "dependent",
-  hasSpouseAllowance: false,
-  spouseAllowanceMonthly: "10000",
-  futureWeeklyHours: "30",
-  futureInsuranceStatus: "insured",
-  futureHourlyWage: "",
-};
+  SimulationExecutionFailure,
+  SimulationExecutionSuccess,
+} from "@/features/social-insurance/v2/simulationExecutionTypes";
 
 export function SocialInsuranceSimulator() {
-  const [form, setForm] = useState<FormState>(initialFormState);
+  const [state, setState] = useState(initialSimulationUiState);
 
-  const result = useMemo(() => {
-    return calculateSocialInsurance({
-      ageGroup: form.ageGroup,
-      current: {
-        hourlyWage: toNumber(form.currentHourlyWage),
-        weeklyHours: toNumber(form.currentWeeklyHours),
-        insuranceStatus: form.currentInsuranceStatus,
-        hasSpouseAllowance: form.hasSpouseAllowance,
-        spouseAllowanceMonthly: toNumber(form.spouseAllowanceMonthly),
-      },
-      future: {
-        hourlyWage:
-          form.futureHourlyWage.trim() === ""
-            ? undefined
-            : toNumber(form.futureHourlyWage),
-        weeklyHours: toNumber(form.futureWeeklyHours),
-        insuranceStatus: form.futureInsuranceStatus,
-      },
-    });
-  }, [form]);
+  function updateForm(update: (form: FormState) => FormState) {
+    setState((current) => updateSimulationForm(current, update));
+  }
 
-  const conclusionTone =
-    result.takeHomeDifference > 0
-      ? "増える見込み"
-      : result.takeHomeDifference < 0
-        ? "減る見込み"
-        : "ほぼ同じ";
+  function handleSubmit() {
+    setState(submitSimulation(state));
+  }
+
+  const fieldErrors =
+    state.execution?.status === "invalid" ? state.execution.fieldErrors : [];
+  const invalidExecution: SimulationExecutionFailure | null =
+    state.execution?.status === "invalid" ? state.execution : null;
+  const successExecution: SimulationExecutionSuccess | null =
+    state.execution?.status === "success" ? state.execution : null;
 
   return (
     <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
       <SimulationFormSection
-        ageGroup={form.ageGroup}
-        currentHourlyWage={form.currentHourlyWage}
-        currentWeeklyHours={form.currentWeeklyHours}
-        currentInsuranceStatus={form.currentInsuranceStatus}
-        hasSpouseAllowance={form.hasSpouseAllowance}
-        spouseAllowanceMonthly={form.spouseAllowanceMonthly}
-        futureWeeklyHours={form.futureWeeklyHours}
-        futureInsuranceStatus={form.futureInsuranceStatus}
-        futureHourlyWage={form.futureHourlyWage}
+        form={state.form}
+        fieldErrors={fieldErrors}
+        onGoalChange={(value) =>
+          updateForm((form) => ({ ...form, goal: value }))
+        }
         onAgeGroupChange={(value) =>
-          setForm((current) => ({ ...current, ageGroup: value }))
+          updateForm((form) => ({ ...form, ageGroup: value }))
         }
         onCurrentHourlyWageChange={(value) =>
-          setForm((current) => ({ ...current, currentHourlyWage: value }))
+          updateForm((form) =>
+            updateWorkplace(form, "current", "hourlyWage", value),
+          )
         }
         onCurrentWeeklyHoursChange={(value) =>
-          setForm((current) => ({ ...current, currentWeeklyHours: value }))
+          updateForm((form) =>
+            updateWorkplace(form, "current", "weeklyHours", value),
+          )
         }
         onCurrentInsuranceStatusChange={(value) =>
-          setForm((current) => ({
-            ...current,
-            currentInsuranceStatus: value,
-          }))
+          updateForm((form) =>
+            updateWorkplace(form, "current", "insuranceStatus", value),
+          )
         }
-        onSpouseAllowancePresenceChange={(value) =>
-          setForm((current) => ({
-            ...current,
-            hasSpouseAllowance: value === "yes",
-          }))
+        onCurrentSpouseAllowanceStatusChange={(value) =>
+          updateForm((form) =>
+            updateSpouseAllowance(form, "current", "status", value),
+          )
         }
-        onSpouseAllowanceMonthlyChange={(value) =>
-          setForm((current) => ({
-            ...current,
-            spouseAllowanceMonthly: value,
-          }))
+        onCurrentSpouseAllowanceMonthlyChange={(value) =>
+          updateForm((form) =>
+            updateSpouseAllowance(form, "current", "monthlyAmount", value),
+          )
         }
-        onFutureWeeklyHoursChange={(value) =>
-          setForm((current) => ({ ...current, futureWeeklyHours: value }))
+        onProposedWeeklyHoursChange={(value) =>
+          updateForm((form) =>
+            updateWorkplace(form, "proposed", "weeklyHours", value),
+          )
         }
-        onFutureInsuranceStatusChange={(value) =>
-          setForm((current) => ({
-            ...current,
-            futureInsuranceStatus: value,
-          }))
+        onProposedInsuranceStatusChange={(value) =>
+          updateForm((form) =>
+            updateWorkplace(form, "proposed", "insuranceStatus", value),
+          )
         }
-        onFutureHourlyWageChange={(value) =>
-          setForm((current) => ({ ...current, futureHourlyWage: value }))
+        onProposedHourlyWageChange={(value) =>
+          updateForm((form) =>
+            updateWorkplace(form, "proposed", "hourlyWage", value),
+          )
         }
+        onProposedSpouseAllowanceStatusChange={(value) =>
+          updateForm((form) =>
+            updateSpouseAllowance(form, "proposed", "status", value),
+          )
+        }
+        onProposedSpouseAllowanceMonthlyChange={(value) =>
+          updateForm((form) =>
+            updateSpouseAllowance(form, "proposed", "monthlyAmount", value),
+          )
+        }
+        onSubmit={handleSubmit}
       />
 
-      <SimulationResultSection
-        result={result}
-        conclusionTone={conclusionTone}
-      />
+      <div aria-live="polite">
+        {invalidExecution ? (
+          <section className="rounded-lg border border-[#eadfce] bg-white p-4 shadow-[0_10px_30px_rgba(92,67,39,0.08)] sm:p-5">
+            <h2 className="text-lg font-bold text-[#9a4f43]">
+              入力内容を確認してください
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-[#6f5f4f]">
+              入力欄の近くに表示された内容を確認して、もう一度試算してください。
+            </p>
+          </section>
+        ) : null}
+
+        {successExecution ? (
+          <div className="space-y-5">
+            <SummaryConclusionSection
+              conclusion={successExecution.conclusion}
+            />
+            <SimulationResultSection result={successExecution.result} />
+            <SimulationWarningsSection warnings={successExecution.warnings} />
+            <section className="rounded-lg border border-[#eadfce] bg-white/86 p-4 sm:p-5">
+              <h2 className="text-base font-bold text-[#33291f]">
+                計算条件・注意書き
+              </h2>
+              <div className="mt-3">
+                <SimulationAssumptionsSection />
+              </div>
+            </section>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
 
-function toNumber(value: string) {
-  const parsed = Number(value);
+function updateWorkplace<K extends keyof FormState["current"]["workplace"]>(
+  form: FormState,
+  scenario: "current" | "proposed",
+  field: K,
+  value: FormState["current"]["workplace"][K],
+): FormState {
+  return {
+    ...form,
+    [scenario]: {
+      ...form[scenario],
+      workplace: {
+        ...form[scenario].workplace,
+        [field]: value,
+      },
+    },
+  };
+}
 
-  if (!Number.isFinite(parsed) || parsed < 0) {
-    return 0;
-  }
-
-  return parsed;
+function updateSpouseAllowance<
+  K extends keyof FormState["current"]["spouseAllowance"],
+>(
+  form: FormState,
+  scenario: "current" | "proposed",
+  field: K,
+  value: FormState["current"]["spouseAllowance"][K],
+): FormState {
+  return {
+    ...form,
+    [scenario]: {
+      ...form[scenario],
+      spouseAllowance: {
+        ...form[scenario].spouseAllowance,
+        [field]: value,
+      },
+    },
+  };
 }
