@@ -29,7 +29,7 @@ function validateScenario(scenario: Scenario): ValidationWarning[] {
   ) {
     warnings.push({
       code: "insuredUnder20Hours",
-      severity: "warning",
+      severity: "info",
       scope: scenario.key,
       fieldPaths: [
         `${scenario.key}.workplace.weeklyHours`,
@@ -86,7 +86,7 @@ function validateScenario(scenario: Scenario): ValidationWarning[] {
       scope: scenario.key,
       fieldPaths: [`${scenario.key}.spouseAllowance.status`],
       message:
-        "配偶者手当の受給状態が不明です。勤務先への確認が必要な可能性があります。",
+        "配偶者手当の受給状態が不明なため、世帯の現金収支差を確定できません。配偶者の勤務先への確認が必要です。",
       recommendedAction:
         "配偶者の勤務先へ手当の支給条件を確認してください。",
     });

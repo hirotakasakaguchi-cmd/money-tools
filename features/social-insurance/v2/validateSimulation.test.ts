@@ -54,7 +54,7 @@ describe("validateSimulation", () => {
     expect(validateSimulation(input)).toEqual([
       {
         code: "insuredUnder20Hours",
-        severity: "warning",
+        severity: "info",
         scope: "current",
         fieldPaths: [
           "current.workplace.weeklyHours",
@@ -182,7 +182,7 @@ describe("validateSimulation", () => {
         scope: "current",
         fieldPaths: ["current.spouseAllowance.status"],
         message:
-          "配偶者手当の受給状態が不明です。勤務先への確認が必要な可能性があります。",
+          "配偶者手当の受給状態が不明なため、世帯の現金収支差を確定できません。配偶者の勤務先への確認が必要です。",
         recommendedAction:
           "配偶者の勤務先へ手当の支給条件を確認してください。",
       },
@@ -246,18 +246,23 @@ describe("validateSimulation", () => {
     input.current.spouseAllowance = { status: "unknown" };
     input.proposed.workplaces[0].weeklyHours = 19;
 
-    const messages = validateSimulation(input).map(({ message }) => message);
+    const warningTexts = validateSimulation(input).flatMap(
+      ({ message, recommendedAction }) => [message, recommendedAction],
+    );
     const prohibitedPhrases = [
-      "加入対象です",
+      "必ず",
+      "絶対",
+      "違法",
+      "対象外です",
       "扶養から外れます",
-      "違法です",
-      "必ず社保加入になります",
+      "社会保険に加入しなければなりません",
+      "入力が間違っています",
     ];
 
-    expect(messages.every((message) => message.includes("確認"))).toBe(true);
+    expect(warningTexts.every((text) => text.includes("確認"))).toBe(true);
     expect(
-      messages.every((message) =>
-        prohibitedPhrases.every((phrase) => !message.includes(phrase)),
+      warningTexts.every((text) =>
+        prohibitedPhrases.every((phrase) => !text.includes(phrase)),
       ),
     ).toBe(true);
   });
