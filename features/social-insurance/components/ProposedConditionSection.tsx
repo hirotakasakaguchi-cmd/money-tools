@@ -39,6 +39,7 @@ export function ProposedConditionSection({
           <NumberInput
             label="週の労働時間"
             data-field-path="proposed.workplace.weeklyHours"
+            className="scroll-mt-24"
             value={value.workplace.weeklyHours}
             unit="時間"
             onChange={onWeeklyHoursChange}
@@ -68,6 +69,7 @@ export function ProposedConditionSection({
           <NumberInput
             label="変更後の時給"
             data-field-path="proposed.workplace.hourlyWage"
+            className="scroll-mt-24"
             value={value.workplace.hourlyWage}
             unit="円"
             placeholder="現在の時給を入力"

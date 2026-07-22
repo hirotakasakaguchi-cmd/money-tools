@@ -62,6 +62,7 @@ export function SpouseAllowanceFields({
           <NumberInput
             label="配偶者手当の月額"
             data-field-path={monthlyAmountFieldPath}
+            className="scroll-mt-24"
             value={monthlyAmount}
             unit="円"
             onChange={onMonthlyAmountChange}

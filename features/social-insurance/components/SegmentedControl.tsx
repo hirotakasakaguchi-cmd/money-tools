@@ -43,10 +43,10 @@ export function SegmentedControl<T extends string>({
                 value={option.value}
                 checked={isSelected}
                 onChange={() => onChange(option.value)}
-                className="sr-only"
+                className="peer sr-only scroll-mt-24"
               />
               <span
-                className={`flex min-h-11 items-center justify-center rounded-md px-3 text-center text-sm font-bold transition ${
+                className={`flex min-h-11 items-center justify-center rounded-md px-3 text-center text-sm font-bold transition peer-focus:ring-4 peer-focus:ring-[#d6e6d4] ${
                   isSelected
                     ? "bg-white text-[#4f7d59] shadow-sm"
                     : "text-[#7a6a58]"

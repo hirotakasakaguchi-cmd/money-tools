@@ -3,6 +3,11 @@ import {
   getSimulationFocusTarget,
   getSimulationScrollOptions,
 } from "@/features/social-insurance/components/simulationFocus";
+import {
+  initialSimulationUiState,
+  submitSimulation,
+  updateSimulationForm,
+} from "@/features/social-insurance/components/simulationUiState";
 import type { SimulationExecutionResult } from "@/features/social-insurance/v2/simulationExecutionTypes";
 
 describe("simulationFocus", () => {
@@ -59,6 +64,37 @@ describe("simulationFocus", () => {
     expect(getSimulationScrollOptions(true)).toEqual({
       behavior: "auto",
       block: "start",
+    });
+  });
+
+  it("does not select a target when editing clears a submitted result", () => {
+    const submitted = submitSimulation(initialSimulationUiState);
+    const edited = updateSimulationForm(submitted, (form) => ({
+      ...form,
+      goal: "checkTakeHomeMaintenance",
+    }));
+
+    expect(getSimulationFocusTarget(edited.execution)).toBeNull();
+  });
+
+  it("selects a target again for every subsequent submit", () => {
+    const firstSuccess = submitSimulation(initialSimulationUiState);
+    const secondSuccess = submitSimulation(firstSuccess);
+    const invalidForm = updateSimulationForm(secondSuccess, (form) => ({
+      ...form,
+      goal: "",
+    }));
+    const firstInvalid = submitSimulation(invalidForm);
+    const secondInvalid = submitSimulation(firstInvalid);
+
+    expect(secondSuccess.execution).not.toBe(firstSuccess.execution);
+    expect(getSimulationFocusTarget(secondSuccess.execution)).toEqual({
+      type: "result",
+    });
+    expect(secondInvalid.execution).not.toBe(firstInvalid.execution);
+    expect(getSimulationFocusTarget(secondInvalid.execution)).toEqual({
+      type: "field",
+      fieldPath: "goal",
     });
   });
 });

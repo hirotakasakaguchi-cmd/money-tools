@@ -1,11 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SimulationAssumptionsSection } from "@/features/social-insurance/components/SimulationAssumptionsSection";
 import { SimulationFormSection } from "@/features/social-insurance/components/SimulationFormSection";
 import { SimulationResultSection } from "@/features/social-insurance/components/SimulationResultSection";
 import { SimulationWarningsSection } from "@/features/social-insurance/components/SimulationWarningsSection";
 import { SummaryConclusionSection } from "@/features/social-insurance/components/SummaryConclusionSection";
+import {
+  getSimulationFocusTarget,
+  getSimulationScrollOptions,
+} from "@/features/social-insurance/components/simulationFocus";
 import {
   initialSimulationUiState,
   submitSimulation,
@@ -19,6 +23,33 @@ import type {
 
 export function SocialInsuranceSimulator() {
   const [state, setState] = useState(initialSimulationUiState);
+  const resultRegionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const target = getSimulationFocusTarget(state.execution);
+
+    if (target === null) {
+      return;
+    }
+
+    const element =
+      target.type === "result"
+        ? resultRegionRef.current
+        : document.querySelector<HTMLElement>(
+            `[data-field-path="${target.fieldPath}"]`,
+          );
+
+    if (element === null) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    element.focus({ preventScroll: true });
+    element.scrollIntoView(getSimulationScrollOptions(prefersReducedMotion));
+  }, [state.execution]);
 
   function updateForm(update: (form: FormState) => FormState) {
     setState((current) => updateSimulationForm(current, update));
@@ -113,6 +144,7 @@ export function SocialInsuranceSimulator() {
 
         {successExecution ? (
           <div
+            ref={resultRegionRef}
             data-simulation-result
             tabIndex={-1}
             aria-label="試算結果"
