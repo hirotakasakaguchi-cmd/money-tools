@@ -46,6 +46,7 @@ export function SpouseAllowanceFields({
       <div>
         <SegmentedControl
           label="配偶者手当"
+          fieldPath={statusFieldPath}
           value={status}
           columns={3}
           options={[...options]}
@@ -60,6 +61,7 @@ export function SpouseAllowanceFields({
         <div>
           <NumberInput
             label="配偶者手当の月額"
+            data-field-path={monthlyAmountFieldPath}
             value={monthlyAmount}
             unit="円"
             onChange={onMonthlyAmountChange}

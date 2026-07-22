@@ -112,7 +112,12 @@ export function SocialInsuranceSimulator() {
         ) : null}
 
         {successExecution ? (
-          <div className="space-y-5">
+          <div
+            data-simulation-result
+            tabIndex={-1}
+            aria-label="試算結果"
+            className="scroll-mt-24 space-y-5"
+          >
             <SummaryConclusionSection
               conclusion={successExecution.conclusion}
             />

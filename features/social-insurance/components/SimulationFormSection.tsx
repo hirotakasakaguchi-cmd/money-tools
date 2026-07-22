@@ -65,6 +65,7 @@ export function SimulationFormSection({
         <div>
           <SegmentedControl
             label="年齢区分"
+            fieldPath="ageGroup"
             value={form.ageGroup}
             columns={3}
             options={[

@@ -1,7 +1,9 @@
 import { useId } from "react";
+import type { FormFieldPath } from "@/features/social-insurance/v2/formTypes";
 
 type SegmentedControlProps<T extends string> = {
   label: string;
+  fieldPath: FormFieldPath;
   value: T | "";
   columns?: 2 | 3;
   options: { value: T; label: string }[];
@@ -10,6 +12,7 @@ type SegmentedControlProps<T extends string> = {
 
 export function SegmentedControl<T extends string>({
   label,
+  fieldPath,
   value,
   columns = 2,
   options,
@@ -35,6 +38,7 @@ export function SegmentedControl<T extends string>({
             >
               <input
                 type="radio"
+                data-field-path={fieldPath}
                 name={groupName}
                 value={option.value}
                 checked={isSelected}

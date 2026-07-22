@@ -58,6 +58,7 @@ export function ConsultationGoalSection({
             >
               <input
                 type="radio"
+                data-field-path="goal"
                 name="consultationGoal"
                 value={option.value}
                 checked={isSelected}

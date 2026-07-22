@@ -38,6 +38,7 @@ export function ProposedConditionSection({
         <div>
           <NumberInput
             label="週の労働時間"
+            data-field-path="proposed.workplace.weeklyHours"
             value={value.workplace.weeklyHours}
             unit="時間"
             onChange={onWeeklyHoursChange}
@@ -50,6 +51,7 @@ export function ProposedConditionSection({
         <div>
           <SegmentedControl
             label="社会保険加入予定"
+            fieldPath="proposed.workplace.insuranceStatus"
             value={value.workplace.insuranceStatus}
             options={[
               { value: "dependent", label: "扶養内" },
@@ -65,6 +67,7 @@ export function ProposedConditionSection({
         <div>
           <NumberInput
             label="変更後の時給"
+            data-field-path="proposed.workplace.hourlyWage"
             value={value.workplace.hourlyWage}
             unit="円"
             placeholder="現在の時給を入力"
