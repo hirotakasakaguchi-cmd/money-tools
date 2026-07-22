@@ -1,7 +1,10 @@
+import { FormFieldErrorMessages } from "@/features/social-insurance/components/FormFieldErrorMessages";
+import type { FormValidationError } from "@/features/social-insurance/v2/formTypes";
 import type { ConsultationGoal } from "@/features/social-insurance/v2/types";
 
 type ConsultationGoalSectionProps = {
   value: ConsultationGoal | "";
+  fieldErrors: readonly FormValidationError[];
   onChange: (value: ConsultationGoal) => void;
 };
 
@@ -32,6 +35,7 @@ const goalOptions: readonly {
 
 export function ConsultationGoalSection({
   value,
+  fieldErrors,
   onChange,
 }: ConsultationGoalSectionProps) {
   return (
@@ -70,6 +74,7 @@ export function ConsultationGoalSection({
           );
         })}
       </div>
+      <FormFieldErrorMessages errors={fieldErrors} fieldPath="goal" />
     </fieldset>
   );
 }

@@ -1,12 +1,16 @@
 import { ConsultationGoalSection } from "@/features/social-insurance/components/ConsultationGoalSection";
 import { CurrentConditionSection } from "@/features/social-insurance/components/CurrentConditionSection";
+import { FormFieldErrorMessages } from "@/features/social-insurance/components/FormFieldErrorMessages";
 import { ProposedConditionSection } from "@/features/social-insurance/components/ProposedConditionSection";
 import { SegmentedControl } from "@/features/social-insurance/components/SegmentedControl";
 import type {
   AgeGroup,
   InsuranceStatus,
 } from "@/features/social-insurance/types";
-import type { FormState } from "@/features/social-insurance/v2/formTypes";
+import type {
+  FormState,
+  FormValidationError,
+} from "@/features/social-insurance/v2/formTypes";
 import type {
   ConsultationGoal,
   SpouseAllowanceStatus,
@@ -14,6 +18,7 @@ import type {
 
 type SimulationFormSectionProps = {
   form: FormState;
+  fieldErrors: readonly FormValidationError[];
   onGoalChange: (value: ConsultationGoal) => void;
   onAgeGroupChange: (value: AgeGroup) => void;
   onCurrentHourlyWageChange: (value: string) => void;
@@ -31,6 +36,7 @@ type SimulationFormSectionProps = {
 
 export function SimulationFormSection({
   form,
+  fieldErrors,
   onGoalChange,
   onAgeGroupChange,
   onCurrentHourlyWageChange,
@@ -50,22 +56,30 @@ export function SimulationFormSection({
       <h2 className="text-xl font-bold text-[#33291f]">入力</h2>
 
       <div className="mt-5 space-y-6">
-        <ConsultationGoalSection value={form.goal} onChange={onGoalChange} />
-
-        <SegmentedControl
-          label="年齢区分"
-          value={form.ageGroup}
-          columns={3}
-          options={[
-            { value: "under40", label: "39歳以下" },
-            { value: "age40To64", label: "40〜64歳" },
-            { value: "age65AndOver", label: "65歳以上（参考）" },
-          ]}
-          onChange={onAgeGroupChange}
+        <ConsultationGoalSection
+          value={form.goal}
+          fieldErrors={fieldErrors}
+          onChange={onGoalChange}
         />
+
+        <div>
+          <SegmentedControl
+            label="年齢区分"
+            value={form.ageGroup}
+            columns={3}
+            options={[
+              { value: "under40", label: "39歳以下" },
+              { value: "age40To64", label: "40〜64歳" },
+              { value: "age65AndOver", label: "65歳以上（参考）" },
+            ]}
+            onChange={onAgeGroupChange}
+          />
+          <FormFieldErrorMessages errors={fieldErrors} fieldPath="ageGroup" />
+        </div>
 
         <CurrentConditionSection
           value={form.current}
+          fieldErrors={fieldErrors}
           onHourlyWageChange={onCurrentHourlyWageChange}
           onWeeklyHoursChange={onCurrentWeeklyHoursChange}
           onInsuranceStatusChange={onCurrentInsuranceStatusChange}
@@ -79,6 +93,7 @@ export function SimulationFormSection({
 
         <ProposedConditionSection
           value={form.proposed}
+          fieldErrors={fieldErrors}
           onWeeklyHoursChange={onProposedWeeklyHoursChange}
           onInsuranceStatusChange={onProposedInsuranceStatusChange}
           onHourlyWageChange={onProposedHourlyWageChange}
