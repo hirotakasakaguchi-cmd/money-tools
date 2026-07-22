@@ -33,6 +33,15 @@ const goalOptions: readonly {
   },
 ];
 
+const futureGoalLabels = [
+  "社会保険の加入対象か確認する",
+  "扶養を維持できるか確認する",
+  "時給の損益分岐を探す",
+  "労働時間の損益分岐を探す",
+  "手取りを最大化する",
+  "最適な働き方を自動提案する",
+] as const;
+
 export function ConsultationGoalSection({
   value,
   fieldErrors,
@@ -74,6 +83,14 @@ export function ConsultationGoalSection({
             </label>
           );
         })}
+      </div>
+      <div className="mt-4 rounded-lg border border-dashed border-[#d9cfbf] bg-[#faf7f1] p-3">
+        <p className="text-xs font-bold text-[#6f5f4f]">今後対応予定</p>
+        <ul className="mt-2 grid gap-1 text-xs leading-5 text-[#7d7063]">
+          {futureGoalLabels.map((label) => (
+            <li key={label}>・{label}</li>
+          ))}
+        </ul>
       </div>
       <FormFieldErrorMessages errors={fieldErrors} fieldPath="goal" />
     </fieldset>
