@@ -29,13 +29,16 @@ export function SegmentedControl<T extends string>({
       >
         {options.map((option) => {
           const isSelected = option.value === value;
+          const optionId = `${groupName}-${option.value}`;
 
           return (
             <label
               key={option.value}
-              className="block cursor-pointer rounded-md"
+              htmlFor={optionId}
+              className="block cursor-pointer touch-manipulation select-none rounded-md"
             >
               <input
+                id={optionId}
                 type="radio"
                 data-field-path={fieldPath}
                 name={groupName}
@@ -45,7 +48,7 @@ export function SegmentedControl<T extends string>({
                 className="peer sr-only scroll-mt-24"
               />
               <span
-                className={`flex min-h-11 items-center justify-center rounded-md px-3 text-center text-sm font-bold transition peer-focus:ring-4 peer-focus:ring-[#d6e6d4] ${
+                className={`pointer-events-none flex min-h-11 items-center justify-center rounded-md px-3 text-center text-sm font-bold transition peer-focus:ring-4 peer-focus:ring-[#d6e6d4] ${
                   isSelected
                     ? "bg-white text-[#4f7d59] shadow-sm"
                     : "text-[#7a6a58]"

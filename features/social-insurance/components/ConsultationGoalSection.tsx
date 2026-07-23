@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 import { FormFieldErrorMessages } from "@/features/social-insurance/components/FormFieldErrorMessages";
 import type { SimulationUiFieldError } from "@/features/social-insurance/components/simulationUiState";
 import type { ConsultationGoal } from "@/features/social-insurance/v2/types";
@@ -47,6 +49,8 @@ export function ConsultationGoalSection({
   fieldErrors,
   onChange,
 }: ConsultationGoalSectionProps) {
+  const groupName = useId();
+
   return (
     <fieldset>
       <legend className="text-base font-bold text-[#33291f]">
@@ -55,29 +59,32 @@ export function ConsultationGoalSection({
       <div className="mt-3 grid gap-2">
         {goalOptions.map((option) => {
           const isSelected = value === option.value;
+          const optionId = `${groupName}-${option.value}`;
 
           return (
             <label
               key={option.value}
-              className={`block cursor-pointer rounded-lg border p-3 transition ${
+              htmlFor={optionId}
+              className={`block cursor-pointer touch-manipulation select-none rounded-lg border p-3 transition ${
                 isSelected
                   ? "border-[#8fb995] bg-[#eaf3e7]"
                   : "border-[#eadfce] bg-white"
               }`}
             >
               <input
+                id={optionId}
                 type="radio"
                 data-field-path="goal"
-                name="consultationGoal"
+                name={groupName}
                 value={option.value}
                 checked={isSelected}
                 onChange={() => onChange(option.value)}
                 className="peer sr-only scroll-mt-24"
               />
-              <span className="block rounded-sm text-sm font-bold text-[#33291f] peer-focus:ring-4 peer-focus:ring-[#d6e6d4]">
+              <span className="pointer-events-none block rounded-sm text-sm font-bold text-[#33291f] peer-focus:ring-4 peer-focus:ring-[#d6e6d4]">
                 {option.label}
               </span>
-              <span className="mt-1 block text-xs leading-5 text-[#6f5f4f]">
+              <span className="pointer-events-none mt-1 block text-xs leading-5 text-[#6f5f4f]">
                 {option.description}
               </span>
             </label>
