@@ -12,7 +12,8 @@ import type { SocialInsuranceInput } from "@/features/social-insurance/types";
 
 const REPRESENTATIVE_INPUT = {
   annualSalaryYen: 3_600_000,
-  standardMonthlyRemunerationYen: 300_000,
+  healthStandardMonthlyRemunerationYen: 300_000,
+  pensionStandardMonthlyRemunerationYen: 300_000,
   age: 40,
 } satisfies R8ContributionInput;
 
@@ -92,7 +93,8 @@ describe("calculateR8EmployeeContributions", () => {
   it("sums only the independently rounded line items", () => {
     const result = calculateR8EmployeeContributions({
       annualSalaryYen: 3_600_001,
-      standardMonthlyRemunerationYen: 300_001,
+      healthStandardMonthlyRemunerationYen: 300_001,
+      pensionStandardMonthlyRemunerationYen: 300_001,
       age: 40,
     });
     const lineItemTotal =
@@ -119,9 +121,12 @@ describe("calculateR8EmployeeContributions", () => {
     ["annualSalaryYen", Number.POSITIVE_INFINITY],
     ["annualSalaryYen", -1],
     ["annualSalaryYen", 1.5],
-    ["standardMonthlyRemunerationYen", Number.NaN],
-    ["standardMonthlyRemunerationYen", Number.POSITIVE_INFINITY],
-    ["standardMonthlyRemunerationYen", -1],
+    ["healthStandardMonthlyRemunerationYen", Number.NaN],
+    ["healthStandardMonthlyRemunerationYen", Number.POSITIVE_INFINITY],
+    ["healthStandardMonthlyRemunerationYen", -1],
+    ["pensionStandardMonthlyRemunerationYen", Number.NaN],
+    ["pensionStandardMonthlyRemunerationYen", Number.POSITIVE_INFINITY],
+    ["pensionStandardMonthlyRemunerationYen", -1],
     ["age", Number.NaN],
     ["age", Number.POSITIVE_INFINITY],
     ["age", -1],
@@ -142,7 +147,7 @@ describe("calculateR8EmployeeContributions", () => {
     expect(() =>
       calculateR8EmployeeContributions({
         ...REPRESENTATIVE_INPUT,
-        standardMonthlyRemunerationYen: Number.MAX_SAFE_INTEGER,
+        pensionStandardMonthlyRemunerationYen: Number.MAX_SAFE_INTEGER,
       }),
     ).toThrow(RangeError);
   });

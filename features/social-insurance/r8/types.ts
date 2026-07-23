@@ -1,6 +1,7 @@
 export type R8ContributionInput = {
   readonly annualSalaryYen: number;
-  readonly standardMonthlyRemunerationYen: number;
+  readonly healthStandardMonthlyRemunerationYen: number;
+  readonly pensionStandardMonthlyRemunerationYen: number;
   readonly age: number;
 };
 
