@@ -177,11 +177,10 @@ describe("R7 and R8 calculation separation", () => {
     expect(calculateSocialInsurance(legacyInput)).toEqual(before);
   });
 
-  it("keeps legacy, v2, and UI production sources disconnected from R8", () => {
+  it("keeps legacy and existing v2 calculation sources disconnected from R8", () => {
     const guardedFiles = [
       "features/social-insurance/calculateSocialInsurance.ts",
       ...listSourceFiles("features/social-insurance/v2"),
-      ...listSourceFiles("features/social-insurance/components"),
     ];
     const r8ImportPattern =
       /(?:social-insurance\/r8\/|policies\/r8ContributionValues)/;

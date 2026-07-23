@@ -21,6 +21,43 @@ describe("simulationFocus", () => {
     expect(getSimulationFocusTarget(execution)).toEqual({ type: "result" });
   });
 
+  it("selects the result region after R8 success or unsupported age", () => {
+    expect(
+      getSimulationFocusTarget({
+        status: "r8Success",
+        execution: { supported: true },
+      } as never),
+    ).toEqual({ type: "result" });
+    expect(
+      getSimulationFocusTarget({
+        status: "r8Unsupported",
+        execution: {
+          supported: false,
+          policy: "r8",
+          unsupportedReason: "age65AndOverIssue5",
+        },
+      }),
+    ).toEqual({ type: "result" });
+  });
+
+  it("selects a new R8 field as the first invalid focus target", () => {
+    expect(
+      getSimulationFocusTarget({
+        status: "invalid",
+        fieldErrors: [
+          {
+            code: "required",
+            fieldPath: "current.monthlyRemuneration",
+            message: "値を入力してください。",
+          },
+        ],
+      }),
+    ).toEqual({
+      type: "field",
+      fieldPath: "current.monthlyRemuneration",
+    });
+  });
+
   it("selects the first field error after an invalid simulation", () => {
     const execution: SimulationExecutionResult = {
       status: "invalid",

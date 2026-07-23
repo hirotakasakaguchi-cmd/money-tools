@@ -445,10 +445,9 @@ describe("R7 and public-path separation", () => {
     expect(executeSimulation(r7Form)).toEqual(before);
   });
 
-  it("keeps v2, UI, and public routes disconnected and R8 inactive", () => {
+  it("keeps existing v2 and app routes disconnected while R8 stays inactive", () => {
     const guardedFiles = [
       ...listSourceFiles("features/social-insurance/v2"),
-      ...listSourceFiles("features/social-insurance/components"),
       ...listSourceFiles("app"),
     ];
     const internalR8Pattern =
