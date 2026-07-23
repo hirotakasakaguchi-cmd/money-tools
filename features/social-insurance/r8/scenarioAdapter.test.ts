@@ -250,7 +250,7 @@ describe("R8 scenario input safety", () => {
 });
 
 describe("R8 scenario adapter separation", () => {
-  it("keeps existing v2 and app routes disconnected while R8 stays inactive", () => {
+  it("keeps existing v2 and app routes disconnected while R8 is active", () => {
     const guardedFiles = [
       ...listSourceFiles("features/social-insurance/v2"),
       ...listSourceFiles("app"),
@@ -264,7 +264,7 @@ describe("R8 scenario adapter separation", () => {
         `${file} imports the R8 scenario adapter`,
       ).not.toMatch(adapterImportPattern);
     }
-    expect(R8_POLICY.isPubliclyActive).toBe(false);
+    expect(R8_POLICY.isPubliclyActive).toBe(true);
   });
 });
 

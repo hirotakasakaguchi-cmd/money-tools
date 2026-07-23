@@ -22,10 +22,10 @@ import type {
 import { validateSimulation } from "@/features/social-insurance/v2/validateSimulation";
 
 /**
- * Executes the unpublished R8 v2 calculation path.
+ * Executes the R8 v2 calculation path selected explicitly by the public UI.
  *
- * This entry point is intentionally disconnected from executeSimulation(),
- * the public UI, and public routes while the R8 policy remains inactive.
+ * This entry point remains separate from the default R7 executeSimulation()
+ * path so activating R8 does not change the initial public calculation.
  */
 export function executeR8SimulationInternal(
   input: R8InternalSimulationInput,

@@ -80,7 +80,6 @@ export type KnownLimitationCode =
   | "age65AndOverLegacyConstraint"
   | "multipleWorkplacesUnsupported"
   | "bonusesAndAllowancesUnsupported"
-  | "notConnectedToPublicCalculation"
   | "dependentIncomeThresholdDiffersFromIncomeTax"
   | "legacyTaxApproximation"
   | "legacyCalculationIsUnversioned";

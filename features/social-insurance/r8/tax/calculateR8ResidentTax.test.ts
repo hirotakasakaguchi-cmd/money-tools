@@ -67,7 +67,7 @@ describe("calculateR8ResidentTax", () => {
     });
   });
 
-  it("returns R8 fiscal-year and steady-state metadata from the inactive policy", () => {
+  it("returns R8 fiscal-year and steady-state metadata from the active policy", () => {
     const result = calculateR8ResidentTax(TWO_MILLION_YEN_INPUT);
 
     expect(result.calculationMode).toBe(R8_POLICY.calculationMode);
@@ -79,7 +79,7 @@ describe("calculateR8ResidentTax", () => {
       reiwaYear: 8,
       westernYear: 2026,
     });
-    expect(R8_POLICY.isPubliclyActive).toBe(false);
+    expect(R8_POLICY.isPubliclyActive).toBe(true);
     expect(R8_POLICY.knownLimitations).toContainEqual(
       expect.objectContaining({
         code: "residentTaxSteadyStateApproximation",

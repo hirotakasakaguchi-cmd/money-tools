@@ -28,7 +28,7 @@ describe("R8 employee contribution values", () => {
     });
   });
 
-  it("links the values to the inactive R8 Fukuoka policy and its sources", () => {
+  it("links the values to the active R8 Fukuoka policy and its sources", () => {
     expect(R8_EMPLOYEE_CONTRIBUTION_VALUES).toMatchObject({
       policyId: R8_POLICY.policyId,
       region: R8_POLICY.region,
@@ -47,7 +47,7 @@ describe("R8 employee contribution values", () => {
       R8_EMPLOYEE_CONTRIBUTION_VALUES.officialSourceReference
         .employmentInsurance,
     ).toBe(R8_POLICY.officialSources[2]);
-    expect(R8_POLICY.isPubliclyActive).toBe(false);
+    expect(R8_POLICY.isPubliclyActive).toBe(true);
   });
 });
 

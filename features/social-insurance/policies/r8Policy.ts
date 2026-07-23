@@ -1,8 +1,8 @@
 import type { CalculationPolicy } from "@/features/social-insurance/policies/types";
 
 /**
- * Unconnected metadata for the planned Reiwa 8 calculation.
- * No public calculation reads this policy until Issue #3 is completed.
+ * Public Reiwa 8 calculation metadata.
+ * The public UI uses this policy only when the user explicitly selects R8.
  */
 export const R8_POLICY = {
   policyId: "r8FukuokaSteadyStateAnnualEstimate",
@@ -29,7 +29,7 @@ export const R8_POLICY = {
     westernYear: 2026,
   },
   calculationMode: "steadyStateAnnualEstimate",
-  isPubliclyActive: false,
+  isPubliclyActive: true,
   effectiveDates: {
     healthInsurance: {
       status: "effective",
@@ -139,11 +139,6 @@ export const R8_POLICY = {
     {
       code: "bonusesAndAllowancesUnsupported",
       description: "賞与、毎月固定手当、一時手当は対象外です。",
-    },
-    {
-      code: "notConnectedToPublicCalculation",
-      description:
-        "Issue #3の全工程と回帰確認が完了するまで、公開計算には接続しません。",
     },
     {
       code: "dependentIncomeThresholdDiffersFromIncomeTax",

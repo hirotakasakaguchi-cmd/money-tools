@@ -445,7 +445,7 @@ describe("R7 and public-path separation", () => {
     expect(executeSimulation(r7Form)).toEqual(before);
   });
 
-  it("keeps existing v2 and app routes disconnected while R8 stays inactive", () => {
+  it("keeps existing v2 and app routes disconnected while R8 is active", () => {
     const guardedFiles = [
       ...listSourceFiles("features/social-insurance/v2"),
       ...listSourceFiles("app"),
@@ -459,7 +459,7 @@ describe("R7 and public-path separation", () => {
         `${file} imports the internal R8 v2 path`,
       ).not.toMatch(internalR8Pattern);
     }
-    expect(R8_POLICY.isPubliclyActive).toBe(false);
+    expect(R8_POLICY.isPubliclyActive).toBe(true);
   });
 });
 
