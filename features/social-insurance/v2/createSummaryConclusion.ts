@@ -115,7 +115,10 @@ function createDependentAndInsuredConclusion(
 
 export function createSummaryConclusion(
   goal: SimulationGoal,
-  result: SimulationResult,
+  result: Pick<
+    SimulationResult,
+    "personalTakeHomeDifferenceYen" | "householdDifferenceYen"
+  >,
 ): SummaryConclusion {
   switch (goal) {
     case "compareAnnualTakeHome":
