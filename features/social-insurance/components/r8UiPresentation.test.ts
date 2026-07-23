@@ -42,9 +42,15 @@ describe("R8 UI presentation contract", () => {
     expect(proposedSource).toContain(
       'data-field-path="proposed.monthlyRemuneration"',
     );
-    expect(currentSource).toContain("社会保険料の計算に使う月給");
-    expect(proposedSource).toContain("社会保険料の計算に使う月給");
-    expect(currentSource).toContain("基本給や毎月の手当を含む");
+    expect(currentSource).toContain("現在の総支給月額");
+    expect(proposedSource).toContain("社保加入後の総支給月額");
+    for (const source of [currentSource, proposedSource]) {
+      expect(source).toContain(
+        "手取りではなく、基本給や毎月の手当を含む総支給額を入力してください。",
+      );
+      expect(source).toContain('calculationYear === "r8"');
+      expect(source).not.toContain("社会保険料の計算に使う月給");
+    }
   });
 
   it("shows the required R8 result labels and steady-state year label", () => {
