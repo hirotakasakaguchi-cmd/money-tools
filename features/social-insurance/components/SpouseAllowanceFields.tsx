@@ -2,18 +2,18 @@ import { NumberInput } from "@/components/ui/NumberInput";
 import { FormFieldErrorMessages } from "@/features/social-insurance/components/FormFieldErrorMessages";
 import { SegmentedControl } from "@/features/social-insurance/components/SegmentedControl";
 import type {
-  FormFieldPath,
-  FormValidationError,
-} from "@/features/social-insurance/v2/formTypes";
+  SimulationUiFieldError,
+  SimulationUiFieldPath,
+} from "@/features/social-insurance/components/simulationUiState";
 import type { SpouseAllowanceStatus } from "@/features/social-insurance/v2/types";
 
 type SpouseAllowanceFieldsProps = {
   scenario: "current" | "proposed";
   status: SpouseAllowanceStatus | "";
   monthlyAmount: string;
-  statusFieldPath: FormFieldPath;
-  monthlyAmountFieldPath: FormFieldPath;
-  fieldErrors: readonly FormValidationError[];
+  statusFieldPath: SimulationUiFieldPath;
+  monthlyAmountFieldPath: SimulationUiFieldPath;
+  fieldErrors: readonly SimulationUiFieldError[];
   onStatusChange: (value: SpouseAllowanceStatus) => void;
   onMonthlyAmountChange: (value: string) => void;
 };

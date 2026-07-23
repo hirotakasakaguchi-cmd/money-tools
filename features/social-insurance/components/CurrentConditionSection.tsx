@@ -4,16 +4,22 @@ import { SegmentedControl } from "@/features/social-insurance/components/Segment
 import { SpouseAllowanceFields } from "@/features/social-insurance/components/SpouseAllowanceFields";
 import type { InsuranceStatus } from "@/features/social-insurance/types";
 import type {
-  FormValidationError,
   ScenarioFormState,
 } from "@/features/social-insurance/v2/formTypes";
+import type {
+  SimulationCalculationYear,
+  SimulationUiFieldError,
+} from "@/features/social-insurance/components/simulationUiState";
 
 type CurrentConditionSectionProps = {
   value: ScenarioFormState;
-  fieldErrors: readonly FormValidationError[];
+  calculationYear: SimulationCalculationYear;
+  monthlyRemuneration: string;
+  fieldErrors: readonly SimulationUiFieldError[];
   onHourlyWageChange: (value: string) => void;
   onWeeklyHoursChange: (value: string) => void;
   onInsuranceStatusChange: (value: InsuranceStatus) => void;
+  onMonthlyRemunerationChange: (value: string) => void;
   onSpouseAllowanceStatusChange: (
     value: Exclude<ScenarioFormState["spouseAllowance"]["status"], "">,
   ) => void;
@@ -22,10 +28,13 @@ type CurrentConditionSectionProps = {
 
 export function CurrentConditionSection({
   value,
+  calculationYear,
+  monthlyRemuneration,
   fieldErrors,
   onHourlyWageChange,
   onWeeklyHoursChange,
   onInsuranceStatusChange,
+  onMonthlyRemunerationChange,
   onSpouseAllowanceStatusChange,
   onSpouseAllowanceMonthlyChange,
 }: CurrentConditionSectionProps) {
@@ -79,6 +88,27 @@ export function CurrentConditionSection({
             fieldPath="current.workplace.insuranceStatus"
           />
         </div>
+        {calculationYear === "r8" ? (
+          <div>
+            <NumberInput
+              label="社会保険料の計算に使う月給"
+              data-field-path="current.monthlyRemuneration"
+              className="scroll-mt-24"
+              value={monthlyRemuneration}
+              unit="円"
+              inputMode="numeric"
+              step="1"
+              onChange={onMonthlyRemunerationChange}
+            />
+            <p className="mt-2 text-xs leading-5 text-[#6f5f4f]">
+              基本給や毎月の手当を含む、おおよその月額を入力してください。
+            </p>
+            <FormFieldErrorMessages
+              errors={fieldErrors}
+              fieldPath="current.monthlyRemuneration"
+            />
+          </div>
+        ) : null}
         <SpouseAllowanceFields
           scenario="current"
           status={value.spouseAllowance.status}
