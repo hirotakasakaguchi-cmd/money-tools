@@ -4,8 +4,8 @@ import { R8_POLICY } from "@/features/social-insurance/policies/r8Policy";
  * Employee contribution rates expressed as decimal multipliers.
  * For example, 0.05055 represents an employee rate of 5.055%.
  *
- * These values belong to the inactive R8 policy and are not used by the
- * legacy calculation, v2 execution, or the public UI.
+ * These values belong to the active R8 policy and remain isolated from the
+ * legacy R7 calculation path.
  */
 export const R8_EMPLOYEE_CONTRIBUTION_VALUES = {
   policyId: R8_POLICY.policyId,

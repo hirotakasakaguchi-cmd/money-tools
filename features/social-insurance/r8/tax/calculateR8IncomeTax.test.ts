@@ -86,7 +86,7 @@ describe("calculateR8IncomeTax", () => {
       westernYear: 2026,
     });
     expect(result.calculationMode).toBe(R8_POLICY.calculationMode);
-    expect(R8_POLICY.isPubliclyActive).toBe(false);
+    expect(R8_POLICY.isPubliclyActive).toBe(true);
   });
 
   it("accepts zero-yen inputs", () => {
@@ -440,7 +440,7 @@ describe("R7, R8 contribution, resident-tax, v2, and UI separation", () => {
     expect(source).not.toMatch(/calculateR8ResidentTax/);
     expect(source).not.toMatch(/social-insurance\/v2/);
     expect(source).not.toMatch(/social-insurance\/components/);
-    expect(R8_POLICY.isPubliclyActive).toBe(false);
+    expect(R8_POLICY.isPubliclyActive).toBe(true);
   });
 });
 

@@ -31,15 +31,15 @@ describe("social insurance calculation policy metadata", () => {
     });
   });
 
-  it("keeps the planned R8 policy inactive and uses the steady-state mode", () => {
+  it("activates R8 alongside R7 and uses the steady-state mode", () => {
     expect(R8_POLICY).toMatchObject({
       policyId: "r8FukuokaSteadyStateAnnualEstimate",
       calculationMode: "steadyStateAnnualEstimate",
-      isPubliclyActive: false,
+      isPubliclyActive: true,
     });
     expect(
       CALCULATION_POLICIES.filter(({ isPubliclyActive }) => isPubliclyActive),
-    ).toEqual([R7_LEGACY_POLICY]);
+    ).toEqual([R7_LEGACY_POLICY, R8_POLICY]);
   });
 
   it("limits both policies to the Fukuoka branch metadata", () => {
@@ -148,7 +148,6 @@ describe("social insurance calculation policy metadata", () => {
       "age65AndOverLegacyConstraint",
       "multipleWorkplacesUnsupported",
       "bonusesAndAllowancesUnsupported",
-      "notConnectedToPublicCalculation",
       "dependentIncomeThresholdDiffersFromIncomeTax",
     ] satisfies KnownLimitationCode[];
     const limitationCodes = R8_POLICY.knownLimitations.map(({ code }) => code);

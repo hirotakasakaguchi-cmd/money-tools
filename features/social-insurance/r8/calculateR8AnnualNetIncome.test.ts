@@ -242,7 +242,7 @@ describe("calculateR8AnnualNetIncome", () => {
       residentTaxFiscalYear: R8_POLICY.residentTaxFiscalYear,
     });
     expect(result.calculationMode).toBe("steadyStateAnnualEstimate");
-    expect(R8_POLICY.isPubliclyActive).toBe(false);
+    expect(R8_POLICY.isPubliclyActive).toBe(true);
   });
 
   it("does not mutate the integration input", () => {
@@ -365,7 +365,7 @@ describe("R8 annual net-income integration separation", () => {
     }
   });
 
-  it("keeps the integration layer thin and the R8 policy inactive", () => {
+  it("keeps the integration layer thin when the R8 policy is active", () => {
     const source = readFileSync(
       "features/social-insurance/r8/calculateR8AnnualNetIncome.ts",
       "utf8",
@@ -377,7 +377,7 @@ describe("R8 annual net-income integration separation", () => {
     expect(source).not.toMatch(
       /(?:ContributionValues|EMPLOYEE_RATE|INCOME_TAX_BANDS|BASIC_DEDUCTION_BANDS)/,
     );
-    expect(R8_POLICY.isPubliclyActive).toBe(false);
+    expect(R8_POLICY.isPubliclyActive).toBe(true);
   });
 });
 

@@ -296,8 +296,9 @@ describe("simulationUiState", () => {
     );
   });
 
-  it("keeps R8 policy metadata inactive", () => {
-    expect(R8_POLICY.isPubliclyActive).toBe(false);
+  it("keeps R7 as the initial year when R8 policy metadata is active", () => {
+    expect(R8_POLICY.isPubliclyActive).toBe(true);
+    expect(initialSimulationUiState.calculationYear).toBe("r7");
   });
 });
 
