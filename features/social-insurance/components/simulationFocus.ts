@@ -1,19 +1,25 @@
-import type { FormFieldPath } from "@/features/social-insurance/v2/formTypes";
-import type { SimulationExecutionResult } from "@/features/social-insurance/v2/simulationExecutionTypes";
+import type {
+  SimulationUiExecution,
+  SimulationUiFieldPath,
+} from "@/features/social-insurance/components/simulationUiState";
 
 export type SimulationFocusTarget =
   | { readonly type: "result" }
-  | { readonly type: "field"; readonly fieldPath: FormFieldPath }
+  | { readonly type: "field"; readonly fieldPath: SimulationUiFieldPath }
   | null;
 
 export function getSimulationFocusTarget(
-  execution: SimulationExecutionResult | null,
+  execution: SimulationUiExecution | null,
 ): SimulationFocusTarget {
   if (execution === null) {
     return null;
   }
 
-  if (execution.status === "success") {
+  if (
+    execution.status === "success" ||
+    execution.status === "r8Success" ||
+    execution.status === "r8Unsupported"
+  ) {
     return { type: "result" };
   }
 

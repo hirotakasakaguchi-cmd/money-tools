@@ -1,10 +1,10 @@
 import { FormFieldErrorMessages } from "@/features/social-insurance/components/FormFieldErrorMessages";
-import type { FormValidationError } from "@/features/social-insurance/v2/formTypes";
+import type { SimulationUiFieldError } from "@/features/social-insurance/components/simulationUiState";
 import type { ConsultationGoal } from "@/features/social-insurance/v2/types";
 
 type ConsultationGoalSectionProps = {
   value: ConsultationGoal | "";
-  fieldErrors: readonly FormValidationError[];
+  fieldErrors: readonly SimulationUiFieldError[];
   onChange: (value: ConsultationGoal) => void;
 };
 

@@ -1,9 +1,8 @@
 import { useId } from "react";
-import type { FormFieldPath } from "@/features/social-insurance/v2/formTypes";
 
 type SegmentedControlProps<T extends string> = {
   label: string;
-  fieldPath: FormFieldPath;
+  fieldPath: string;
   value: T | "";
   columns?: 2 | 3;
   options: { value: T; label: string }[];

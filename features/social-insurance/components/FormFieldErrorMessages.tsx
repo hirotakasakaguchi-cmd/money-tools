@@ -1,11 +1,11 @@
 import type {
-  FormFieldPath,
-  FormValidationError,
-} from "@/features/social-insurance/v2/formTypes";
+  SimulationUiFieldError,
+  SimulationUiFieldPath,
+} from "@/features/social-insurance/components/simulationUiState";
 
 type FormFieldErrorMessagesProps = {
-  errors: readonly FormValidationError[];
-  fieldPath: FormFieldPath;
+  errors: readonly SimulationUiFieldError[];
+  fieldPath: SimulationUiFieldPath;
 };
 
 export function FormFieldErrorMessages({

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { R8SimulationAssumptionsSection } from "@/features/social-insurance/components/R8SimulationAssumptionsSection";
+import { R8SimulationResultSection } from "@/features/social-insurance/components/R8SimulationResultSection";
 import { SimulationAssumptionsSection } from "@/features/social-insurance/components/SimulationAssumptionsSection";
 import { SimulationFormSection } from "@/features/social-insurance/components/SimulationFormSection";
 import { SimulationResultSection } from "@/features/social-insurance/components/SimulationResultSection";
@@ -13,13 +15,12 @@ import {
 import {
   initialSimulationUiState,
   submitSimulation,
+  updateSimulationAge,
+  updateSimulationCalculationYear,
   updateSimulationForm,
+  updateSimulationMonthlyRemuneration,
 } from "@/features/social-insurance/components/simulationUiState";
 import type { FormState } from "@/features/social-insurance/v2/formTypes";
-import type {
-  SimulationExecutionFailure,
-  SimulationExecutionSuccess,
-} from "@/features/social-insurance/v2/simulationExecutionTypes";
 
 export function SocialInsuranceSimulator() {
   const [state, setState] = useState(initialSimulationUiState);
@@ -61,21 +62,38 @@ export function SocialInsuranceSimulator() {
 
   const fieldErrors =
     state.execution?.status === "invalid" ? state.execution.fieldErrors : [];
-  const invalidExecution: SimulationExecutionFailure | null =
+  const invalidExecution =
     state.execution?.status === "invalid" ? state.execution : null;
-  const successExecution: SimulationExecutionSuccess | null =
+  const r7Execution =
     state.execution?.status === "success" ? state.execution : null;
+  const r8Execution =
+    state.execution?.status === "r8Success"
+      ? state.execution.execution
+      : null;
+  const unsupportedExecution =
+    state.execution?.status === "r8Unsupported"
+      ? state.execution.execution
+      : null;
 
   return (
     <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
       <SimulationFormSection
         form={state.form}
+        calculationYear={state.calculationYear}
+        age={state.age}
+        currentMonthlyRemuneration={state.currentMonthlyRemuneration}
+        proposedMonthlyRemuneration={state.proposedMonthlyRemuneration}
         fieldErrors={fieldErrors}
+        onCalculationYearChange={(value) =>
+          setState((current) =>
+            updateSimulationCalculationYear(current, value),
+          )
+        }
         onGoalChange={(value) =>
           updateForm((form) => ({ ...form, goal: value }))
         }
-        onAgeGroupChange={(value) =>
-          updateForm((form) => ({ ...form, ageGroup: value }))
+        onAgeChange={(value) =>
+          setState((current) => updateSimulationAge(current, value))
         }
         onCurrentHourlyWageChange={(value) =>
           updateForm((form) =>
@@ -90,6 +108,15 @@ export function SocialInsuranceSimulator() {
         onCurrentInsuranceStatusChange={(value) =>
           updateForm((form) =>
             updateWorkplace(form, "current", "insuranceStatus", value),
+          )
+        }
+        onCurrentMonthlyRemunerationChange={(value) =>
+          setState((current) =>
+            updateSimulationMonthlyRemuneration(
+              current,
+              "current",
+              value,
+            ),
           )
         }
         onCurrentSpouseAllowanceStatusChange={(value) =>
@@ -117,6 +144,15 @@ export function SocialInsuranceSimulator() {
             updateWorkplace(form, "proposed", "hourlyWage", value),
           )
         }
+        onProposedMonthlyRemunerationChange={(value) =>
+          setState((current) =>
+            updateSimulationMonthlyRemuneration(
+              current,
+              "proposed",
+              value,
+            ),
+          )
+        }
         onProposedSpouseAllowanceStatusChange={(value) =>
           updateForm((form) =>
             updateSpouseAllowance(form, "proposed", "status", value),
@@ -142,7 +178,24 @@ export function SocialInsuranceSimulator() {
           </section>
         ) : null}
 
-        {successExecution ? (
+        {unsupportedExecution ? (
+          <section
+            ref={resultRegionRef}
+            data-simulation-result
+            tabIndex={-1}
+            aria-label="試算結果"
+            className="scroll-mt-24 rounded-lg border border-[#e8c9a7] bg-[#fff4df] p-5 text-[#62462f]"
+          >
+            <h2 className="text-xl font-bold">
+              65歳以上の計算は現在準備中です
+            </h2>
+            <p className="mt-2 text-sm leading-6">
+              令和7年度を選ぶと、現在の参考値計算をご利用いただけます。
+            </p>
+          </section>
+        ) : null}
+
+        {r7Execution ? (
           <div
             ref={resultRegionRef}
             data-simulation-result
@@ -151,16 +204,38 @@ export function SocialInsuranceSimulator() {
             className="scroll-mt-24 space-y-5"
           >
             <SummaryConclusionSection
-              conclusion={successExecution.conclusion}
+              conclusion={r7Execution.conclusion}
             />
-            <SimulationResultSection result={successExecution.result} />
-            <SimulationWarningsSection warnings={successExecution.warnings} />
+            <SimulationResultSection result={r7Execution.result} />
+            <SimulationWarningsSection warnings={r7Execution.warnings} />
             <section className="rounded-lg border border-[#eadfce] bg-white/86 p-4 sm:p-5">
               <h2 className="text-base font-bold text-[#33291f]">
                 計算条件・注意書き
               </h2>
               <div className="mt-3">
                 <SimulationAssumptionsSection />
+              </div>
+            </section>
+          </div>
+        ) : null}
+
+        {r8Execution ? (
+          <div
+            ref={resultRegionRef}
+            data-simulation-result
+            tabIndex={-1}
+            aria-label="試算結果"
+            className="scroll-mt-24 space-y-5"
+          >
+            <SummaryConclusionSection conclusion={r8Execution.conclusion} />
+            <R8SimulationResultSection result={r8Execution} />
+            <SimulationWarningsSection warnings={r8Execution.warnings} />
+            <section className="rounded-lg border border-[#eadfce] bg-white/86 p-4 sm:p-5">
+              <h2 className="text-base font-bold text-[#33291f]">
+                計算条件・注意書き
+              </h2>
+              <div className="mt-3">
+                <R8SimulationAssumptionsSection />
               </div>
             </section>
           </div>
