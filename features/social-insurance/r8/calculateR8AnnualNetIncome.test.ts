@@ -14,7 +14,8 @@ import type { SocialInsuranceInput } from "@/features/social-insurance/types";
 
 const REPRESENTATIVE_INPUT = {
   annualSalaryYen: 3_600_000,
-  standardMonthlyRemunerationYen: 300_000,
+  healthStandardMonthlyRemunerationYen: 300_000,
+  pensionStandardMonthlyRemunerationYen: 300_000,
   age: 40,
 } satisfies R8AnnualNetIncomeInput;
 
@@ -23,7 +24,8 @@ describe("calculateR8AnnualNetIncome", () => {
     expect(
       calculateR8AnnualNetIncome({
         annualSalaryYen: 1_000_000,
-        standardMonthlyRemunerationYen: 88_000,
+        healthStandardMonthlyRemunerationYen: 88_000,
+        pensionStandardMonthlyRemunerationYen: 88_000,
         age: 39,
       }),
     ).toMatchObject({
@@ -48,7 +50,8 @@ describe("calculateR8AnnualNetIncome", () => {
     expect(
       calculateR8AnnualNetIncome({
         annualSalaryYen: 2_000_000,
-        standardMonthlyRemunerationYen: 170_000,
+        healthStandardMonthlyRemunerationYen: 170_000,
+        pensionStandardMonthlyRemunerationYen: 170_000,
         age: 39,
       }),
     ).toMatchObject({
@@ -220,7 +223,8 @@ describe("calculateR8AnnualNetIncome", () => {
   it("floors annual and monthly net income at zero", () => {
     const result = calculateR8AnnualNetIncome({
       annualSalaryYen: 0,
-      standardMonthlyRemunerationYen: 1_000_000,
+      healthStandardMonthlyRemunerationYen: 1_000_000,
+      pensionStandardMonthlyRemunerationYen: 1_000_000,
       age: 40,
     });
 
@@ -256,11 +260,16 @@ describe("calculateR8AnnualNetIncome", () => {
     ["annualSalaryYen", -1],
     ["annualSalaryYen", 1.5],
     ["annualSalaryYen", Number.MAX_SAFE_INTEGER + 1],
-    ["standardMonthlyRemunerationYen", Number.NaN],
-    ["standardMonthlyRemunerationYen", Number.POSITIVE_INFINITY],
-    ["standardMonthlyRemunerationYen", -1],
-    ["standardMonthlyRemunerationYen", 1.5],
-    ["standardMonthlyRemunerationYen", Number.MAX_SAFE_INTEGER + 1],
+    ["healthStandardMonthlyRemunerationYen", Number.NaN],
+    ["healthStandardMonthlyRemunerationYen", Number.POSITIVE_INFINITY],
+    ["healthStandardMonthlyRemunerationYen", -1],
+    ["healthStandardMonthlyRemunerationYen", 1.5],
+    ["healthStandardMonthlyRemunerationYen", Number.MAX_SAFE_INTEGER + 1],
+    ["pensionStandardMonthlyRemunerationYen", Number.NaN],
+    ["pensionStandardMonthlyRemunerationYen", Number.POSITIVE_INFINITY],
+    ["pensionStandardMonthlyRemunerationYen", -1],
+    ["pensionStandardMonthlyRemunerationYen", 1.5],
+    ["pensionStandardMonthlyRemunerationYen", Number.MAX_SAFE_INTEGER + 1],
     ["age", Number.NaN],
     ["age", Number.POSITIVE_INFINITY],
     ["age", -1],
@@ -281,7 +290,8 @@ describe("calculateR8AnnualNetIncome", () => {
   it("returns only finite, non-negative safe integer yen amounts at the safe salary limit", () => {
     const result = calculateR8AnnualNetIncome({
       annualSalaryYen: Number.MAX_SAFE_INTEGER,
-      standardMonthlyRemunerationYen: 0,
+      healthStandardMonthlyRemunerationYen: 0,
+      pensionStandardMonthlyRemunerationYen: 0,
       age: 39,
     });
     const yenAmounts = [
@@ -304,7 +314,8 @@ describe("calculateR8AnnualNetIncome", () => {
     expect(() =>
       calculateR8AnnualNetIncome({
         annualSalaryYen: Number.MAX_SAFE_INTEGER,
-        standardMonthlyRemunerationYen: Number.MAX_SAFE_INTEGER,
+        healthStandardMonthlyRemunerationYen: Number.MAX_SAFE_INTEGER,
+        pensionStandardMonthlyRemunerationYen: Number.MAX_SAFE_INTEGER,
         age: 40,
       }),
     ).toThrow(RangeError);

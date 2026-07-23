@@ -21,24 +21,31 @@ export function calculateR8EmployeeContributions(
 ): R8ContributionResult {
   assertNonNegativeSafeInteger(input.annualSalaryYen, "annualSalaryYen");
   assertNonNegativeSafeInteger(
-    input.standardMonthlyRemunerationYen,
-    "standardMonthlyRemunerationYen",
+    input.healthStandardMonthlyRemunerationYen,
+    "healthStandardMonthlyRemunerationYen",
+  );
+  assertNonNegativeSafeInteger(
+    input.pensionStandardMonthlyRemunerationYen,
+    "pensionStandardMonthlyRemunerationYen",
   );
   assertNonNegativeSafeInteger(input.age, "age");
 
-  const monthlyRemuneration = input.standardMonthlyRemunerationYen;
+  const healthMonthlyRemuneration =
+    input.healthStandardMonthlyRemunerationYen;
+  const pensionMonthlyRemuneration =
+    input.pensionStandardMonthlyRemunerationYen;
   const healthInsuranceYen = roundAnnualContribution(
-    monthlyRemuneration,
+    healthMonthlyRemuneration,
     R8_EMPLOYEE_CONTRIBUTION_VALUES.healthInsuranceEmployeeRate,
   );
   const nursingCareInsuranceYen = isNursingCareInsuranceAge(input.age)
     ? roundAnnualContribution(
-        monthlyRemuneration,
+        healthMonthlyRemuneration,
         R8_EMPLOYEE_CONTRIBUTION_VALUES.nursingCareEmployeeRate,
       )
     : 0;
   const pensionInsuranceYen = roundAnnualContribution(
-    monthlyRemuneration,
+    pensionMonthlyRemuneration,
     R8_EMPLOYEE_CONTRIBUTION_VALUES.pensionEmployeeRate,
   );
   const employmentInsuranceYen = roundYen(
@@ -46,7 +53,7 @@ export function calculateR8EmployeeContributions(
       R8_EMPLOYEE_CONTRIBUTION_VALUES.employmentInsuranceEmployeeRate,
   );
   const childAndFamilySupportYen = roundAnnualContribution(
-    monthlyRemuneration,
+    healthMonthlyRemuneration,
     R8_EMPLOYEE_CONTRIBUTION_VALUES.childAndFamilySupportEmployeeRate,
   );
   const totalEmployeeContributionYen = addSafeYenAmounts([

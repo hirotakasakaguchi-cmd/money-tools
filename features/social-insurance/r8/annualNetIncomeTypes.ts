@@ -5,7 +5,8 @@ import type { R8ResidentTaxResult } from "@/features/social-insurance/r8/tax/res
 
 export type R8AnnualNetIncomeInput = {
   readonly annualSalaryYen: number;
-  readonly standardMonthlyRemunerationYen: number;
+  readonly healthStandardMonthlyRemunerationYen: number;
+  readonly pensionStandardMonthlyRemunerationYen: number;
   readonly age: number;
 };
 
