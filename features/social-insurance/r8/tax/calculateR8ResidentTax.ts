@@ -5,6 +5,7 @@ import type {
 } from "@/features/social-insurance/r8/tax/residentTaxTypes";
 
 const MINIMUM_EMPLOYMENT_INCOME_DEDUCTION_YEN = 650_000;
+const EMPLOYMENT_INCOME_MINIMUM_START_YEN = 651_000;
 const FIRST_EMPLOYMENT_INCOME_TABLE_THRESHOLD_YEN = 1_900_000;
 const SECOND_EMPLOYMENT_INCOME_TABLE_THRESHOLD_YEN = 3_600_000;
 const THIRD_EMPLOYMENT_INCOME_TABLE_THRESHOLD_YEN = 6_600_000;
@@ -106,7 +107,7 @@ export function calculateR8ResidentTaxEmploymentIncome(
 ): number {
   assertNonNegativeSafeInteger(annualSalaryYen, "annualSalaryYen");
 
-  if (annualSalaryYen < MINIMUM_EMPLOYMENT_INCOME_DEDUCTION_YEN) {
+  if (annualSalaryYen < EMPLOYMENT_INCOME_MINIMUM_START_YEN) {
     return 0;
   }
 
