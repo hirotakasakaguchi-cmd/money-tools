@@ -1,9 +1,11 @@
 import { R8_POLICY } from "@/features/social-insurance/policies/r8Policy";
 import { calculateR8EmployeeContributions } from "@/features/social-insurance/r8/calculateR8Contributions";
 import type {
+  R8AnnualNetIncomeContextInput,
   R8AnnualNetIncomeInput,
   R8AnnualNetIncomeResult,
 } from "@/features/social-insurance/r8/annualNetIncomeTypes";
+import type { R8ContributionResult } from "@/features/social-insurance/r8/types";
 import { calculateR8IncomeTax } from "@/features/social-insurance/r8/tax/calculateR8IncomeTax";
 import { calculateR8ResidentTax } from "@/features/social-insurance/r8/tax/calculateR8ResidentTax";
 
@@ -27,9 +29,10 @@ const MONTHS_PER_YEAR = 12;
  * withholding or payment schedule.
  */
 export function calculateR8AnnualNetIncome(
-  input: R8AnnualNetIncomeInput,
+  input: R8AnnualNetIncomeInput | R8AnnualNetIncomeContextInput,
 ): R8AnnualNetIncomeResult {
-  const socialInsuranceBreakdown = calculateR8EmployeeContributions(input);
+  const socialInsuranceBreakdown =
+    resolveEmployeeContributionBreakdown(input);
   const annualEmployeeSocialInsuranceYen =
     socialInsuranceBreakdown.totalEmployeeContributionYen;
   const taxInput = {
@@ -73,6 +76,30 @@ export function calculateR8AnnualNetIncome(
     },
     calculationMode: R8_POLICY.calculationMode,
   };
+}
+
+function resolveEmployeeContributionBreakdown(
+  input: R8AnnualNetIncomeInput | R8AnnualNetIncomeContextInput,
+): R8ContributionResult {
+  if (!("employeeContribution" in input)) {
+    return calculateR8EmployeeContributions(input);
+  }
+
+  if (input.employeeContribution.kind === "fixedZero") {
+    return input.employeeContribution.breakdown;
+  }
+
+  if (
+    input.employeeContribution.input.annualSalaryYen !== input.annualSalaryYen
+  ) {
+    throw new RangeError(
+      "The contribution context annual salary must match annualSalaryYen.",
+    );
+  }
+
+  return calculateR8EmployeeContributions(
+    input.employeeContribution.input,
+  );
 }
 
 function addSafeYenAmounts(amounts: readonly number[]) {

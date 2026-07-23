@@ -1,4 +1,5 @@
 import type { R8_POLICY } from "@/features/social-insurance/policies/r8Policy";
+import type { R8EmployeeContributionContext } from "@/features/social-insurance/r8/scenarioAdapter";
 import type { R8ContributionResult } from "@/features/social-insurance/r8/types";
 import type { R8IncomeTaxResult } from "@/features/social-insurance/r8/tax/incomeTaxTypes";
 import type { R8ResidentTaxResult } from "@/features/social-insurance/r8/tax/residentTaxTypes";
@@ -8,6 +9,11 @@ export type R8AnnualNetIncomeInput = {
   readonly healthStandardMonthlyRemunerationYen: number;
   readonly pensionStandardMonthlyRemunerationYen: number;
   readonly age: number;
+};
+
+export type R8AnnualNetIncomeContextInput = {
+  readonly annualSalaryYen: number;
+  readonly employeeContribution: R8EmployeeContributionContext;
 };
 
 export type R8AnnualNetIncomeCalculationYear = {

@@ -10,7 +10,7 @@ const LONG_HOURS_CONFIRMATION_THRESHOLD = 37.5;
 const DEPENDENT_INCOME_CONFIRMATION_THRESHOLD_YEN = 1_300_000;
 
 export function validateSimulation(
-  input: SimulationInput,
+  input: Pick<SimulationInput, "current" | "proposed">,
 ): ValidationWarning[] {
   return [input.current, input.proposed].flatMap(validateScenario);
 }
