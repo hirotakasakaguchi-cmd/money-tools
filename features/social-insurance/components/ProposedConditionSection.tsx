@@ -92,7 +92,7 @@ export function ProposedConditionSection({
         {calculationYear === "r8" ? (
           <div>
             <NumberInput
-              label="社会保険料の計算に使う月給"
+              label="社保加入後の総支給月額"
               data-field-path="proposed.monthlyRemuneration"
               className="scroll-mt-24"
               value={monthlyRemuneration}
@@ -102,7 +102,7 @@ export function ProposedConditionSection({
               onChange={onMonthlyRemunerationChange}
             />
             <p className="mt-2 text-xs leading-5 text-[#6f5f4f]">
-              基本給や毎月の手当を含む、おおよその月額を入力してください。
+              手取りではなく、基本給や毎月の手当を含む総支給額を入力してください。
             </p>
             <FormFieldErrorMessages
               errors={fieldErrors}
